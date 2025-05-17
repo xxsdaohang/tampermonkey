@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tampermonkey官网入口 - 强大的用户脚本管理器</title>
+    <meta name="keywords" content="Tampermonkey、油猴、用户脚本、浏览器扩展、网页定制。" />
+    <meta name="description" content="Tampermonkey是一款流行的用户脚本管理器，支持多种主流浏览器，通过运行自定义JavaScript脚本，实现网页功能增强、界面美化、广告拦截等。">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>
+        tailwind.config = { darkMode: `class` }
+    </script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="shortcut icon" href="./tampermonkey.png">
+    <link rel="manifest" href="site.webmanifest">
+    <script>
+        // 自定义Tailwind配置
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#165DFF', // 深蓝色主色调
+                        secondary: '#36BFFA', // 浅蓝色辅助色
+                        neutral: {
+                            100: '#F8F9FA',
+                            200: '#E9ECEF',
+                            700: '#343A40',
+                            800: '#212529',
+                            900: '#121212'
+                        }
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .hover-scale {
+                transition: transform 0.3s ease;
+            }
+            .hover-scale:hover {
+                transform: scale(1.03);
+            }
+            .feature-card {
+                @apply bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+            }
+            .icon-bg {
+                @apply bg-primary/10 dark:bg-primary/20 p-3 rounded-lg mr-4;
+            }
+            .resource-card {
+                @apply bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 hover:-translate-y-1;
+            }
+        }
+    </style>
+</head>
+<body class="min-h-screen font-inter bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+
+        <!-- 导航栏 -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 dark:bg-gray-800/90 backdrop-blur-md shadow-sm transition-all duration-300" id="navbar">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between h-16">
+                    <div class="flex items-center">
+                        <a href="#" class="flex-shrink-0 flex items-center">
+                            <i class="fas fa-puzzle-piece text-primary text-xl mr-2"></i>
+                            <span class="text-primary font-bold text-xl">Tampermonkey</span>
+                        </a>
+                        <div class="hidden sm:ml-6 sm:flex sm:space-x-8">
+                            <a href="#about" class="border-b-2 border-primary px-1 pt-1 text-sm font-medium text-primary">网站介绍</a>
+                            <a href="#features" class="border-transparent hover:border-primary px-1 pt-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary">功能特点</a>
+                            <a href="#steps" class="border-transparent hover:border-primary px-1 pt-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary">使用步骤</a>
+                            <a href="#faq" class="border-transparent hover:border-primary px-1 pt-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary">常见问题</a>
+                            <a href="#reviews" class="border-transparent hover:border-primary px-1 pt-1 text-sm font-medium text-gray-500 dark:text-gray-400 hover:text-primary">用户评价</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors" id="themeToggle">
+                            <i class="fas fa-moon-o text-gray-500 dark:text-yellow-400"></i>
+                        </button>
+                        <button class="ml-4 block sm:hidden p-2 rounded-md text-gray-500 dark:text-gray-400 hover:text-primary hover:bg-gray-100 dark:hover:bg-gray-700" id="mobile-menu-button">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 移动端菜单 -->
+            <div class="sm:hidden hidden" id="mobile-menu">
+                <div class="pt-2 pb-3 space-y-1 px-4">
+                    <a href="#about" class="bg-primary/5 border-l-4 border-primary text-primary block pl-3 pr-4 py-2 text-base font-medium">网站介绍</a>
+                    <a href="#features" class="border-l-4 border-transparent hover:border-primary hover:bg-primary/5 text-gray-600 dark:text-gray-300 hover:text-primary block pl-3 pr-4 py-2 text-base font-medium">功能特点</a>
+                    <a href="#steps" class="border-l-4 border-transparent hover:border-primary hover:bg-primary/5 text-gray-600 dark:text-gray-300 hover:text-primary block pl-3 pr-4 py-2 text-base font-medium">使用步骤</a>
+                    <a href="#faq" class="border-l-4 border-transparent hover:border-primary hover:bg-primary/5 text-gray-600 dark:text-gray-300 hover:text-primary block pl-3 pr-4 py-2 text-base font-medium">常见问题</a>
+                    <a href="#reviews" class="border-l-4 border-transparent hover:border-primary hover:bg-primary/5 text-gray-600 dark:text-gray-300 hover:text-primary block pl-3 pr-4 py-2 text-base font-medium">用户评价</a>
+                </div>
+            </div>
+        </nav>
+
+        <header class="relative bg-gradient-to-r from-primary to-secondary text-white py-16 md:py-24 pt-24">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center fade-in">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-shadow">Tampermonkey</h1>
+                    <p class="text-xl md:text-2xl max-w-3xl mx-auto opacity-90">强大的用户脚本管理器，定制你的网页体验</p>
+                    <div class="mt-8 flex flex-col md:flex-row justify-center space-y-4 md:space-y-0 md:space-x-6">
+                        <a class="bg-white text-primary hover:bg-gray-100 hover:scale-105 transition-transform font-medium py-3 px-6 rounded-lg shadow-lg"
+                           href="https://www.litxdh.com/sites/tampermonkey.html" target="_blank">
+                            <i class="fas fa-external-link-alt mr-2"></i>访问官网
+                        </a>
+                        <a class="bg-white text-primary hover:bg-gray-100 hover:scale-105 transition-transform font-medium py-3 px-6 rounded-lg shadow-lg"
+                            href="https://pan.quark.cn/s/97703bfac418" target="_blank"   content="nofollow no-referrer">
+                            <i class="fas fa-external-link-alt mr-2"></i>电子书/zlib资源包
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+            <div class="absolute inset-0 bg-black opacity-10"></div>
+        </header>
+
+        <!-- 增加隔离空间 -->
+        <div class="h-5 md:h-10"></div>
+
+        <!-- 网站介绍部分 -->
+        <section id="about" class="mb-16 fade-in" style="animation-delay: 0.4s">
+            <h2 class="text-2xl font-bold mb-8 flex items-center">
+                <div class="icon-bg">
+                    <i class="fas fa-info-circle text-primary text-xl"></i>
+                </div>
+                网站介绍
+            </h2>
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-8 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed mb-4">
+                            <i class="fas fa-puzzle-piece text-primary mr-2"></i>Tampermonkey（篡改猴）是一款功能强大的浏览器扩展工具，自2010年发布以来，已成为全球超过1000万用户的首选脚本管理器。它通过运行用户自定义的JavaScript脚本，赋予用户深度定制网页的能力，涵盖广告拦截、界面美化、功能增强、自动化操作等场景。
+                        </p>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
+                            <i class="fas fa-code text-primary mr-2"></i>Tampermonkey允许你在特定网页上运行自定义的JavaScript代码，从而实现对网页的功能增强、界面美化或自动化操作。它支持包括Chrome、Edge、Firefox、Safari等主流浏览器。无论是普通用户还是开发者，均可借助其灵活的特性，突破网页原生限制，显著提升浏览效率与体验。
+                        </p>
+                    </div>
+                    <div class="rounded-lg overflow-hidden shadow-xl transform hover:scale-[1.02] transition-transform duration-300">
+                        <img src="./tampermonkey.jpg" alt="Tampermonkey界面展示" class="w-full h-auto">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 功能特点部分 -->
+        <section id="features" class="mb-16 fade-in" style="animation-delay: 0.6s">
+            <h2 class="text-2xl font-bold mb-8 flex items-center">
+                <div class="icon-bg">
+                    <i class="fas fa-thumbs-up text-primary text-xl"></i>
+                </div>
+                功能特点
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-cogs text-primary mr-2"></i>
+                        脚本管理中枢
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        Tampermonkey提供直观的仪表盘，支持脚本的安装、启用、禁用及删除操作，并能按分类管理。用户可设置自动更新频率，确保脚本始终为最新版本，避免安全漏洞。内置的CodeMirror编辑器支持语法高亮、代码折叠与ESLint语法检查，便于直接在浏览器中开发和调试脚本。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-sync-alt text-primary mr-2"></i>
+                        跨设备同步与兼容性
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        通过云端同步功能，用户可在不同设备间无缝切换脚本配置。兼容Greasemonkey脚本生态，并内置沙箱环境隔离脚本权限，防止恶意代码访问敏感数据。针对老旧脚本，提供兼容模式以确保其在现代浏览器中正常运行。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-shield-alt text-primary mr-2"></i>
+                        安全与隐私保护
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        脚本运行需通过元数据声明权限范围，用户可审查并限制其访问权限。扩展默认启用匿名统计收集（可手动关闭），隐身模式下则完全停止数据采集。建议仅从Greasy Fork等可信平台安装脚本，并定期清理失效脚本。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 使用步骤部分 -->
+        <section id="steps" class="mb-16 fade-in" style="animation-delay: 0.6s">
+            <h2 class="text-2xl font-bold mb-8 flex items-center">
+                <div class="icon-bg">
+                    <i class="fas fa-step-forward text-primary text-xl"></i>
+                </div>
+                使用步骤
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-download text-primary mr-2"></i>
+                        安装扩展
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        在浏览器的扩展商店中搜索“Tampermonkey”，然后安装它。安装完成后，点击浏览器工具栏中的Tampermonkey图标，确保其已启用。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-search text-primary mr-2"></i>
+                        获取脚本
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        点击浏览器工具栏中的Tampermonkey图标，选择“获取新脚本”。访问用户脚本库网站，如GreasyFork，搜索并选择需要的脚本进行安装。点击“安装此脚本”按钮，Tampermonkey会接管并提示确认安装。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-sliders-h text-primary mr-2"></i>
+                        管理脚本
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        在Tampermonkey的管理界面中，可以启用、禁用或删除已安装的脚本。可以查看脚本的运行状态和错误日志。还可以设置脚本更新、通知等配置。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 常见问题部分 -->
+        <section id="faq" class="mb-16 fade-in" style="animation-delay: 0.6s">
+            <h2 class="text-2xl font-bold mb-8 flex items-center">
+                <div class="icon-bg">
+                    <i class="fas fa-question-circle text-primary text-xl"></i>
+                </div>
+                常见问题
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-exclamation-triangle text-secondary mr-2"></i>
+                        脚本无法运行
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        可能是脚本与当前网页不兼容，或者脚本本身存在错误。可以尝试更新脚本到最新版本，或者在脚本详情页查看是否有其他用户遇到类似问题。如果问题依旧，可以尝试联系脚本作者寻求帮助。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-exchange-alt text-secondary mr-2"></i>
+                        脚本冲突
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        当安装多个脚本时，可能会出现脚本之间相互冲突的情况。可以通过逐一禁用脚本，来确定是哪些脚本发生了冲突。然后，根据自己的需求，选择保留其中一个脚本，或者寻找替代的脚本。
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <h3 class="text-xl font-semibold mb-4 flex items-center">
+                        <i class="fas fa-history text-secondary mr-2"></i>
+                        脚本更新后出现问题
+                    </h3>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        如果脚本更新后出现了问题，可以尝试回滚到之前的稳定版本。在脚本详情页面，通常会提供版本选择功能，用户可以选择安装旧版本的脚本。同时，也可以关注脚本作者发布的更新日志，了解更新内容和可能存在的问题。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 用户评价部分 -->
+        <section id="reviews" class="mb-16 fade-in" style="animation-delay: 0.6s">
+            <h2 class="text-2xl font-bold mb-8 flex items-center">
+                <div class="icon-bg">
+                    <i class="fas fa-comments text-primary text-xl"></i>
+                </div>
+                用户评价
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover-scale">
+                    <div class="flex items-center mb-4">
+                        <img src="https://picsum.photos/200/200?random=36" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-lg">技术小白小O</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-quote-left text-primary/30 mr-2"></i>
+                        Tampermonkey操作简单，即使是新手也能轻松上手，通过安装脚本就能实现很多实用功能。
+                        <i class="fas fa-quote-right text-primary/30 ml-2"></i>
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover-scale">
+                    <div class="flex items-center mb-4">
+                        <img src="https://picsum.photos/200/200?random=37" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-lg">资深用户小P</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-quote-left text-primary/30 mr-2"></i>
+                        功能强大，支持多种浏览器，脚本资源丰富，能满足各种个性化需求。
+                        <i class="fas fa-quote-right text-primary/30 ml-2"></i>
+                    </p>
+                </div>
+
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-md hover-scale">
+                    <div class="flex items-center mb-4">
+                        <img src="https://picsum.photos/200/200?random=38" alt="用户头像" class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-semibold text-lg">开发者小Q</h4>
+                            <div class="flex text-yellow-400">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">
+                        <i class="fas fa-quote-left text-primary/30 mr-2"></i>
+                        内置的脚本编辑器功能强大，方便我开发和调试自己的脚本。
+                        <i class="fas fa-quote-right text-primary/30 ml-2"></i>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="text-center text-gray-600 dark:text-gray-400 pt-8 border-t border-gray-200 dark:border-gray-700 fade-in" style="animation-delay: 1.2s">
+            <p class="text-sm">© 2025 Tampermonkey 用户脚本管理器</p>
+        </footer>
+
+    </div>
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function() {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 10) {
+                navbar.classList.add('shadow-md');
+                navbar.classList.remove('shadow-sm');
+            } else {
+                navbar.classList.remove('shadow-md');
+                navbar.classList.add('shadow-sm');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 主题切换功能
+        const themeToggle = document.getElementById('themeToggle');
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+            themeToggle.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            if (document.documentElement.classList.contains('dark')) {
+                themeToggle.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
+            } else {
+                themeToggle.innerHTML = '<i class="fas fa-moon-o text-gray-500"></i>';
+            }
+        });
+
+        // 淡入动画
+        document.addEventListener('DOMContentLoaded', () => {
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            fadeElements.forEach(element => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(20px)';
+                element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+                observer.observe(element);
+            });
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // 关闭移动端菜单
+                    document.getElementById('mobile-menu').classList.add('hidden');
+                    
+                    // 平滑滚动到目标位置
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80, // 减去导航栏高度
+                        behavior: 'smooth'
+                    });
+                    
+                    // 更新活动导航链接
+                    document.querySelectorAll('nav a').forEach(navLink => {
+                        navLink.classList.remove('border-primary');
+                        navLink.classList.add('border-transparent');
+                    });
+                    this.classList.remove('border-transparent');
+                    this.classList.add('border-primary');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
